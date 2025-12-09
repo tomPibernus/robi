@@ -1,5 +1,3 @@
-
-
 // Sonidos.h
 #ifndef SOUNDS_H  // Esto evita que el archivo se cargue dos veces por error
 #define SOUNDS_H

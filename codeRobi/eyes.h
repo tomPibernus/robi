@@ -1,11 +1,4 @@
-
 #include <Arduino.h>
-
-
-
-
-
-
 
 static const unsigned char PROGMEM eye0[] =
 { 

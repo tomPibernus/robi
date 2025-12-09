@@ -1,5 +1,6 @@
 #include "Sounds.h"
 #include "config.h"
+#include "robot_vector.h"
 
 float durationUltra;
 float distanceUltra;
@@ -20,7 +21,10 @@ void medirDistancia(){
 
   if (distanceUltra < 3.0){
     beSad();
+    face(1);
   }
+
+  return distanceUltra;
 }
 
 
