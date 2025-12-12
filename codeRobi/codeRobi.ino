@@ -1,6 +1,7 @@
 #include "ultraSonic.h"
 #include "config.h"
 #include "robot_vector.h"
+#include "sounds.h"
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -13,9 +14,7 @@
 void setup(){
   // Display
   Serial.begin(9600);
-  Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
-  
+  initFace(); 
 
   // Buzzer
   pinMode(buzzPin, OUTPUT);
@@ -29,13 +28,13 @@ void setup(){
 }
 
 void loop(){
-  while(true){
+  // Check sensor FIRST to interrupt waiting
+  float dist = medirDistancia();
+  if (dist < 3.0) {
+    sonidoTriste(buzzPin);
+    angryShake(3); 
+    // angryShake takes ~320ms + drawing time
+  } else {
     face(1);
-    
   }
-    
-  medirDistancia();
-  
-  
-  
 }

@@ -25,14 +25,6 @@ void initFace() {
 int mood = 1;
 int xp=16;
 
-
-
-void face(int id) {
-  int n;
-
-  Serial.println(id);
-
-
 // Helper to draw eyes at specific offset/mood
 void drawEyes(int xd_val, int mood_val) {
   int x1 = xd_val + (xp>16? (16+2*(xp-16)):xp);
@@ -62,20 +54,29 @@ void angryShake(int id) {
    drawEyes(0, id); // Return to center
 }
 
-// ... existing code ...
+
+
+void face(int id) {
+  int n;
+
+  Serial.println(id);
+
 
   static int xd=0;
   static int espera=0;
   static int step=0;
-  // int x1,x2; // Removed local declaration
-
+  int x1,x2; 
+  
   mood=id;
+
+
 
   if (espera>0) {
     espera--;
     delay(1);
   } else {
-    // x1/x2 calculations moved to drawEyes
+    x1=   xd+ (xp>16? (16+2*(xp-16)):xp);
+    x2=64+xd+ (xp<16? (-16+(xp*2))  :xp);
     switch (step){
       case 0:
        // Using helper function
