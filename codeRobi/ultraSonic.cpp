@@ -1,15 +1,10 @@
-#include "Sounds.h"
 #include "config.h"
 #include "robot_vector.h"
 
 float durationUltra;
 float distanceUltra;
 
-void beSad() {
-  sonidoTriste(buzzPin);
-}
-
-void medirDistancia(){
+float medirDistancia(){
   
   digitalWrite(trigPin, LOW);  
   delayMicroseconds(2);  
@@ -17,12 +12,9 @@ void medirDistancia(){
   delayMicroseconds(10);  
   digitalWrite(trigPin, LOW);
   durationUltra = pulseIn(echoPin, HIGH);
-  distanceUltra = (durationUltra*.0343)/2;  
+  distanceUltra = (durationUltra*.0343)/2; 
 
-  if (distanceUltra < 3.0){
-    beSad();
-    face(1);
-  }
+
 
   return distanceUltra;
 }

@@ -6,5 +6,7 @@
 
 // Aquí solo DECLARAMOS las funciones que vamos a usar fuera
 void face(int n);
+void initFace();
+void angryShake(int id);
 
 #endif

@@ -5,7 +5,7 @@
 #include <Arduino.h> // Importante: Necesario para usar cosas de Arduino aquí
 
 // Aquí solo DECLARAMOS las funciones que vamos a usar fuera
-void medirDistancia();
+float medirDistancia();
 
 
 #endif

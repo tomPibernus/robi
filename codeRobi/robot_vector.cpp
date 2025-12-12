@@ -3,6 +3,7 @@
 #include <Adafruit_SSD1306.h>
 #include "config.h"
 #include "ultraSonic.h"
+#include "sounds.h"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -12,38 +13,74 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 #include "eyes.h"
 
+void initFace() {
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3C for 128x32
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
+  display.clearDisplay();
+  display.display();
+}
 
-void face(int n) {
+int mood = 1;
+int xp=16;
 
-  Serial.println(n);
 
-  int xp=16;
-  int mood=1;
+
+void face(int id) {
+  int n;
+
+  Serial.println(id);
+
+
+// Helper to draw eyes at specific offset/mood
+void drawEyes(int xd_val, int mood_val) {
+  int x1 = xd_val + (xp>16? (16+2*(xp-16)):xp);
+  int x2 = 64 + xd_val + (xp<16? (-16+(xp*2))  :xp);
+
+  display.clearDisplay(); 
+  if (xp<6) { 
+          display.drawBitmap(x1, 8, peyes[mood_val][2][0], 32, 32, WHITE);
+          display.drawBitmap(x2, 8, peyes[mood_val][1][1], 32, 32, WHITE);
+  } else if (xp<26) {
+          display.drawBitmap(x1, 8, peyes[mood_val][0][0], 32, 32, WHITE);
+          display.drawBitmap(x2, 8, peyes[mood_val][0][1], 32, 32, WHITE); 
+  } else {
+          display.drawBitmap(x1, 8, peyes[mood_val][1][0], 32, 32, WHITE); 
+          display.drawBitmap(x2, 8, peyes[mood_val][2][1], 32, 32, WHITE);
+  }
+  display.display();
+}
+
+void angryShake(int id) {
+   // Fast shake animation
+   for(int i=0; i<8; i++) {
+      int shake = (i % 2 == 0) ? -6 : 6; 
+      drawEyes(shake, id);
+      delay(40); 
+   }
+   drawEyes(0, id); // Return to center
+}
+
+// ... existing code ...
 
   static int xd=0;
   static int espera=0;
   static int step=0;
-  int x1,x2;
+  // int x1,x2; // Removed local declaration
+
+  mood=id;
+
   if (espera>0) {
     espera--;
     delay(1);
   } else {
-    x1=   xd+ (xp>16? (16+2*(xp-16)):xp);
-    x2=64+xd+ (xp<16? (-16+(xp*2))  :xp);
+    // x1/x2 calculations moved to drawEyes
     switch (step){
       case 0:
-       display.clearDisplay(); // Clear the display buffer
-       if (xp<6) { 
-               display.drawBitmap(x1, 8, peyes[mood][2][0], 32, 32, WHITE);
-               display.drawBitmap(x2, 8, peyes[mood][1][1], 32, 32, WHITE);
-       } else if (xp<26) {
-               display.drawBitmap(x1, 8, peyes[mood][0][0], 32, 32, WHITE);
-               display.drawBitmap(x2, 8, peyes[mood][0][1], 32, 32, WHITE); 
-       } else {
-               display.drawBitmap(x1, 8, peyes[mood][1][0], 32, 32, WHITE); 
-               display.drawBitmap(x2, 8, peyes[mood][2][1], 32, 32, WHITE);
-       }
-       display.display();
+       // Using helper function
+       drawEyes(xd, mood);
+       // ... existing random logic ...
        espera=random(250, 1000);
        n=random(0,7);
        if (n==6) {
@@ -72,12 +109,10 @@ void face(int n) {
     }
   }
 
-  if (n==2) xp=(xp<=0?0:xp-1); 
-  if (n==4) xp=(xp>=32?32:xp+1);
-  if (n==1) {
-  mood=(mood>=5?0:mood+1);
-  do {} while (medirDistancia() < 3.0);
-  }
-  if (n!=0) { espera=0; step=0; }
+  // if (id==2) xp=(xp<=0?0:xp-1); 
+  // if (id==4) xp=(xp>=32?32:xp+1);
+  
+
+  if (id!=0) { espera=0; step=0; }
 
 }
