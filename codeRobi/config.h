@@ -2,9 +2,6 @@
 #define CONFIG_H
 
 #include <Arduino.h>
-// Pines de Motores
-#define PIN_MOTOR_A 5
-#define PIN_MOTOR_B 6
 
 const int echoPin = 5;
 const int trigPin = 2;
@@ -18,5 +15,16 @@ const int buzzPin = 8;
 
 const int scl = A0;
 const int sda = A1;
+
+// Motores
+// Motor A (Izquierdo)
+#define ENA 9
+#define IN1 7
+#define IN2 6
+
+// Motor B (Derecho)
+#define ENB 10
+#define IN3 4
+#define IN4 3
 
 #endif
